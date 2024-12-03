@@ -77,10 +77,15 @@ int RecieveFrame(struct RecvFrameE220900T22SJP_t *recv_frame)
 ```
 int SendFrame(struct LoRaConfigItem_t &config, uint8_t *send_data, int size)
 ```
-#### Parameters
+#### Parameters(固定モード)
 * _config_: 設定値の格納先
 * _send_data_: 送信データ
 * _size_: 送信データサイズ
+
+#### Parameters(トランスペアレントモード)
+* _send_data_: 送信データ
+* _size_: 送信データサイズ
+
 #### Returns
 `0`: 成功; `1`: 失敗
 
