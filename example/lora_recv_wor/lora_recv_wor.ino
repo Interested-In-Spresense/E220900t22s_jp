@@ -111,8 +111,8 @@ void setup() {
     Serial.printf("init ok\n");
   }
 
-  // WRO受信モード(M0=0,M1=1)へ移行する
-  SerialMon.printf("switch to normal mode\n");
+  // WOR受信モード(M0=0,M1=1)へ移行する
+  SerialMon.printf("switch to WOR receiving mode\n");
   lora.SwitchToWORReceivingMode();
 
 }
