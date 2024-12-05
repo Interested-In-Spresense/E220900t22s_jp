@@ -28,12 +28,10 @@ void setup() {
     0b10000,  // air_data_rate SF:9 BW:125
     0b00,     // subpacket_size 200
     0b1,      // rssi_ambient_noise_flag 有効
-    0b0,      // transmission_pause_flag 有効
     0b01,     // transmitting_power 13 dBm
     0x00,     // own_channel 0
     0b1,      // rssi_byte_flag 有効
     0b1,      // transmission_method_type 固定送信モード
-    0b0,      // lbt_flag 有効
     0b011,    // wor_cycle 2000 ms
     0x0000,   // encryption_key 0
     0x0000,   // target_address 0

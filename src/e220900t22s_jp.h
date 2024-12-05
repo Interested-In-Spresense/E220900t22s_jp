@@ -37,12 +37,10 @@ struct LoRaConfigItem_t {
   uint8_t air_data_rate;
   uint8_t subpacket_size;
   uint8_t rssi_ambient_noise_flag;
-  uint8_t transmission_pause_flag;
   uint8_t transmitting_power;
   uint8_t own_channel;
   uint8_t rssi_byte_flag;
   uint8_t transmission_method_type;
-  uint8_t lbt_flag;
   uint16_t wor_cycle;
   uint16_t encryption_key;
   uint16_t target_address;

@@ -44,7 +44,6 @@ int CLoRa::InitLoRaModule(struct LoRaConfigItem_t &config) {
   uint8_t REG1 = 0;
   REG1 = REG1 | (config.subpacket_size << 6);
   REG1 = REG1 | (config.rssi_ambient_noise_flag << 5);
-  REG1 = REG1 | (config.transmission_pause_flag << 4);
   REG1 = REG1 | (config.transmitting_power);
   command.push_back(REG1);
   switch(config.subpacket_size){
@@ -72,7 +71,6 @@ int CLoRa::InitLoRaModule(struct LoRaConfigItem_t &config) {
   uint8_t REG3 = 0;
   REG3 = REG3 | (config.rssi_byte_flag << 7);
   REG3 = REG3 | (config.transmission_method_type << 6);
-  REG3 = REG3 | (config.lbt_flag << 4);
   REG3 = REG3 | (config.wor_cycle);
   command.push_back(REG3);
   transmission_method_val = config.transmission_method_type;

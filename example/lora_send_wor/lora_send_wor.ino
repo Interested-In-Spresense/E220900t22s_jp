@@ -2,19 +2,33 @@
 #include <vector>
 #include "e220900t22s_jp.h"
 
+/* Send data size is lora subblock size - lora heaser size. */
+#define SEND_DATA_SIZE (29) // 32 - 3
+//#define SEND_DATA_SIZE (61) // 64 - 3
+//#define SEND_DATA_SIZE (125) // 128 - 3
+//#define SEND_DATA_SIZE (197) // 200 - 3
+
 CLoRa lora;
 
 // LoRa設定値
 struct LoRaConfigItem_t config = {
-  0xFFFF,   // own_address
+  0x0000,   // own_address 0
   0b011,    // baud_rate 9600 bps
   0b10000,  // air_data_rate SF:9 BW:125
-  0b11,     // subpacket_size 32
+#if (SEND_DATA_SIZE == 29)
+  SUBPACKET_32_BITS,
+#elif (SEND_DATA_SIZE == 61)
+  SUBPACKET_64_BITS,
+#elif (SEND_DATA_SIZE == 125)
+  SUBPACKET_128_BITS,
+#else
+  SUBPACKET_200_BITS,
+#endif
   0b1,      // rssi_ambient_noise_flag 有効
   0b01,     // transmitting_power 13 dBm
   0x00,     // own_channel 0
   0b1,      // rssi_byte_flag 有効
-  TRANSPARENT_MODE,      // transmission_method_type トランスペアレントモード
+  FIX_SIZE_MODE,      // transmission_method_type 固定送信モード
   0b011,    // wor_cycle 2000 ms
   0x0000,   // encryption_key 0
   0x0000,   // target_address 0
@@ -46,24 +60,19 @@ void setup() {
     Serial.printf("init ok\n");
   }
 
-  // ノーマルモード(M0=0,M1=0)へ移行する
-  SerialMon.printf("switch to normal mode\n");
-  lora.SwitchToNormalMode();
+  // WOR送信モード(M0=1,M1=0)へ移行する
+  SerialMon.printf("switch to WOR sending mode\n");
+  lora.SwitchToWORSendingMode();
 }
 
-/* Send data size */
-#define MAX_SEND_DATA_SIZE (20) 
-
 void loop() {
-  char msg[MAX_SEND_DATA_SIZE] = { 0 };
+  char msg[SEND_DATA_SIZE] = { 0 };
   static char dmy_data = '0';
-  static int send_data_size = 10;
 
-  for (int i = 0; i < send_data_size; i++) msg[i] = dmy_data + (i % 40);
+  for (int i = 0; i < SEND_DATA_SIZE; i++) msg[i] = dmy_data + (i % 40);
   dmy_data > 'S' ? dmy_data = '0' : dmy_data++;
-  (send_data_size >= MAX_SEND_DATA_SIZE) ? send_data_size = 10 : send_data_size++;
 
-  if (lora.SendFrame((uint8_t *)msg, send_data_size) == 0) {
+  if (lora.SendFrame(config, (uint8_t *)msg, sizeof(msg)) == 0) {
     SerialMon.printf("send succeeded.\n");
     SerialMon.printf("\n");
   } else {
@@ -72,5 +81,5 @@ void loop() {
   }
   SerialMon.flush();
 
-  sleep(10);
+  sleep(60);
 }
